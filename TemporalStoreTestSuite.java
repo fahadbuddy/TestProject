@@ -38,10 +38,23 @@ public class TemporalStoreTestSuite {
 		System.out.println(actualResult);
 	}
 	
+	public static void testParsedInsructions(){
+		String TEST_COMMAND = "GET";
+		
+		String[] split = TEST_COMMAND.split("\t");
+		
+		for(String s: split){			
+			System.out.println(s);
+		}
+		
+	}
+	
 	public static void main(String[] args){
 		//testCreateEntry();
 		//testSuccessfulUpdate();
 		//testCreateEntryError();
-		testUpdateError();
+		//testUpdateError();
+		testParsedInsructions();
 	}
+	
 }

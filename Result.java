@@ -13,5 +13,8 @@
 			return status ? "OK " + data : "ERR " + error;
 		}
 		
+		public static Result createError(String error, String extraParams){
+			return new Result(false, null, error + extraParams);
+		}
 		
 	}

@@ -28,15 +28,47 @@ public class Main {
 		System.out.println("TERMINATED...");
 	}
 
-	private static Result parseInsruction(String nextInstruction) {
-		String[] parsed = nextInstruction.split("\\S+");
+	public static Result parseInsruction(String nextInstruction) {
+		
+		String[] parsed = nextInstruction.split("\t");
+		
+		if (parsed.length > 3){
+			return Result.createError(Errors.TOO_MANY_PARAMS, nextInstruction);
+		}
 		
 		if(allowableCommands.contains(parsed[CMDINDX])){
 			//further processing
+			if (parsed[CMDINDX].equals("GET") || parsed[CMDINDX].equals("LATEST")){
+				return processGetLatest(parsed);
+			}
+			
+			if(parsed[CMDINDX].equals("CREATE") || parsed[CMDINDX].equals("UPDATE")){
+				return processCreateUpdate(parsed);
+			}
+			
+			if(parsed[CMDINDX].equals("DELETE")){
+				return processDelete(parsed);
+			}
+			
 			System.out.println(parsed);
 		}
 		
 		return new Result(false, null, Errors.INVALID_COMMAND + " " + parsed[CMDINDX]);
+	}
+
+	private static Result processDelete(String[] parsed) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private static Result processCreateUpdate(String[] parsed) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private static Result processGetLatest(String[] parsed) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
