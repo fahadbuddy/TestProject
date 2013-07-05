@@ -14,7 +14,7 @@
 		}
 		
 		public static Result createError(String error, String extraParams){
-			return new Result(false, null, error + extraParams);
+			return new Result(false, null, error + " " + extraParams);
 		}
 		
 	}

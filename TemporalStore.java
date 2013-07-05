@@ -21,7 +21,7 @@ public class TemporalStore {
 	public Result createEntry(Integer id, Integer timestamp, String data){
 		
 		if(workingMemory.get(id) != null){
-			return new Result(false, null, Errors.HISTORY_EXISTS_ERROR + " '"+id+"'");
+			return Result.createError(Errors.HISTORY_EXISTS_ERROR, " '"+id+"'");
 			
 		}
 			SortedMap<Integer, String> history = new TreeMap<Integer, String>();
@@ -40,14 +40,14 @@ public class TemporalStore {
 			return new Result(true, previousData, null);
 		}
 		
-		return new Result(false, null, Errors.ID_NOT_FOUND + " '"+id+"'");
+		return Result.createError(Errors.ID_NOT_FOUND, " '"+id+"'");
 	
 	}
 	
 	public Result getData(Integer id, Integer timestamp){
 		String data = workingMemory.get(id).get(timestamp);
 		if(data == null){
-			return new Result(false, null, Errors.ID_NOT_FOUND + " '"+id+"'");
+			return Result.createError(Errors.ID_NOT_FOUND, " '"+id+"'");
 		}	
 			return new Result(true, data, null);
 	}
@@ -57,7 +57,7 @@ public class TemporalStore {
 			return getData(id, workingMemory.get(id).lastKey());
 		}
 		
-		return new Result(false, null, Errors.ID_NOT_FOUND + " '"+id+"'" );
+		return Result.createError(Errors.ID_NOT_FOUND , " '"+id+"'" );
 	}
 	
 	public Result deleteEntry(Integer id){

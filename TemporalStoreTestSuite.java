@@ -39,9 +39,9 @@ public class TemporalStoreTestSuite {
 	}
 	
 	public static void testParsedInsructions(){
-		String TEST_COMMAND = "GET";
+		String TEST_COMMAND = "CREATE";
 		
-		String[] split = TEST_COMMAND.split("\t");
+		String[] split = TEST_COMMAND.split("\\s");
 		
 		for(String s: split){			
 			System.out.println(s);
