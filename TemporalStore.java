@@ -1,7 +1,9 @@
 import java.util.HashMap;
 import java.util.Map;
 import java.util.SortedMap;
+import java.util.SortedSet;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 
 public class TemporalStore {
@@ -54,12 +56,21 @@ public class TemporalStore {
 		
 			SortedMap<Integer, String> history = workingMemory.get(id);
 			
-			//attempt to get the last
 			if (history == null){
 				return Result.createError(Errors.ID_NOT_FOUND, " '"+id+"'");
 			}
 			
-			Integer timestampToFetch = timestamp >= getLastTimeStamp(id) ? getLastTimeStamp(id) : history.tailMap(id).firstKey();
+			Integer timestampToFetch = 0;
+			
+			//if exists in history, return that value.
+			if (history.containsKey(timestamp)){
+				timestampToFetch = timestamp;
+			}
+			//else get the latest timestamp, or the one in range.
+			else{
+				int lastTimeStamp = getLastTimeStamp(id);
+				timestampToFetch = timestamp >= lastTimeStamp ? lastTimeStamp : getTimeStampIdsGreaterThanCurrent(history, timestamp).first(); 
+			}
 		
 			String data = workingMemory.get(id).get(timestampToFetch);	
 	
@@ -67,6 +78,20 @@ public class TemporalStore {
 		}
 
 	
+	private SortedSet<Integer> getTimeStampIdsGreaterThanCurrent(
+			SortedMap<Integer, String> history, Integer id) {
+		SortedSet<Integer> greaterIds = new TreeSet<Integer>();
+		
+		for(Integer currId: history.keySet()){
+			if(currId >= id){				
+				greaterIds.add(currId);
+			}
+		}
+		return greaterIds;
+	}
+
+
+
 	public Result getLatestData(Integer id){
 		if (workingMemory.get(id)!= null){
 			String data = getData(id, getLastTimeStamp(id)).data;
@@ -104,7 +129,7 @@ public class TemporalStore {
 		
 		SortedMap<Integer, String>  history = workingMemory.get(id);
 		
-			for ( Integer removeId: history.tailMap(id).keySet()){
+			for ( Integer removeId: getTimeStampIdsGreaterThanCurrent(history, timestamp)){
 				history.remove(removeId);
 			}
 		
