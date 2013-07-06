@@ -42,7 +42,7 @@ public class TemporalStoreTestSuite {
 	}
 	
 	public static void testParsedInsructions(){
-		String TEST_COMMAND = "CREATE     100	120 		DIRTYDOG";
+		String TEST_COMMAND = "CREATE     100	120 		DIRTYDIANA";
 		
 		String[] split = TEST_COMMAND.split("\\s+");
 		
@@ -52,10 +52,6 @@ public class TemporalStoreTestSuite {
 		
 	}
 	
-	public static void testParsedInteger(){
-		String TEST_INT = "HELLO";
-		Integer.parseInt(TEST_INT);
-	}
 	
 	public static void testSetOps(){
 		SortedSet<Integer> s = new TreeSet<Integer>();
@@ -68,12 +64,11 @@ public class TemporalStoreTestSuite {
 	}
 	
 	public static void main(String[] args){
-		//testCreateEntry();
-		//testSuccessfulUpdate();
-		//testCreateEntryError();
-		//testUpdateError();
-		//testParsedInsructions();
-		//testParsedInteger();
+		testCreateEntry();
+		testSuccessfulUpdate();
+		testCreateEntryError();
+		testUpdateError();
+		testParsedInsructions();
 		testSetOps();
 	}
 	
