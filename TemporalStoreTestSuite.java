@@ -1,3 +1,6 @@
+import java.util.SortedSet;
+import java.util.TreeSet;
+
 
 public class TemporalStoreTestSuite {
 
@@ -39,9 +42,9 @@ public class TemporalStoreTestSuite {
 	}
 	
 	public static void testParsedInsructions(){
-		String TEST_COMMAND = "CREATE";
+		String TEST_COMMAND = "CREATE     100	120 		DIRTYDOG";
 		
-		String[] split = TEST_COMMAND.split("\\s");
+		String[] split = TEST_COMMAND.split("\\s+");
 		
 		for(String s: split){			
 			System.out.println(s);
@@ -49,12 +52,29 @@ public class TemporalStoreTestSuite {
 		
 	}
 	
+	public static void testParsedInteger(){
+		String TEST_INT = "HELLO";
+		Integer.parseInt(TEST_INT);
+	}
+	
+	public static void testSetOps(){
+		SortedSet<Integer> s = new TreeSet<Integer>();
+		s.add(110);
+		s.add(115);
+		s.add(120);
+		s.add(125);
+		
+		System.out.println(s.tailSet(130));
+	}
+	
 	public static void main(String[] args){
 		//testCreateEntry();
 		//testSuccessfulUpdate();
 		//testCreateEntryError();
 		//testUpdateError();
-		testParsedInsructions();
+		//testParsedInsructions();
+		//testParsedInteger();
+		testSetOps();
 	}
 	
 }

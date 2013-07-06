@@ -26,7 +26,7 @@ public class CLIProcessor {
 		while(!nextInstruction.equals("QUIT")){
 			nextInstruction = sc.nextLine();
 			Result result = parseInsruction(nextInstruction);
-			System.out.println(">> " + result);
+			System.out.println(result);
 		}
 		
 		System.out.println("\nTERMINATED...");
@@ -34,7 +34,7 @@ public class CLIProcessor {
 	
 	protected Result parseInsruction(String nextInstruction) {
 		
-		String[] parsed = nextInstruction.split("\\s");
+		String[] parsed = nextInstruction.split("\\s+");
 		
 		if (parsed.length > 4){
 			return Result.createError(Errors.TOO_MANY_PARAMS, nextInstruction);
@@ -42,16 +42,19 @@ public class CLIProcessor {
 		
 		if(allowableCommands.contains(parsed[CMDINDX])){
 			//further processing
-			if (parsed[CMDINDX].equals("GET") || parsed[CMDINDX].equals("LATEST")){
+			if ( "GET".equals(parsed[CMDINDX]) || "LATEST".equals(parsed[CMDINDX])){
 				return processGetLatest(parsed);
 			}
 			
-			if(parsed[CMDINDX].equals("CREATE") || parsed[CMDINDX].equals("UPDATE")){
+			if("CREATE".equals(parsed[CMDINDX]) || "UPDATE".equals(parsed[CMDINDX])){
 				return processCreateUpdate(parsed);
 			}
 			
-			if(parsed[CMDINDX].equals("DELETE")){
+			if("DELETE".equals(parsed[CMDINDX])){
 				return processDelete(parsed);
+			}
+			if("QUIT".equals(parsed[CMDINDX])){
+				return Result.createError(Errors.TERMINATION, "");
 			}
 			
 			System.out.println(parsed);
@@ -61,14 +64,27 @@ public class CLIProcessor {
 	}
 
 	private Result processDelete(String[] parsed) {
-		// TODO Auto-generated method stub
-		return null;
+
+		Result validateResult = Validator.validateArgTypes(parsed);
+		if(validateResult != null){
+			return validateResult;
+		}
+		
+		if(parsed.length == 2){
+			return store.deleteEntry(Integer.parseInt(parsed[ARG1INDX]));
+		}
+		
+		if(parsed.length == 3){
+			return store.deleteEntry(Integer.parseInt(parsed[ARG1INDX]), Integer.parseInt(parsed[ARG2INDX]));
+		}
+		
+		return validateResult;
 	}
 
 	private Result processCreateUpdate(String[] parsed) {
-		Result createResult = Validator.validateArgLength(parsed);
-		if(createResult != null){
-			return createResult;
+		Result validateResult = Validator.validateArgTypes(parsed);
+		if(validateResult != null){
+			return validateResult;
 		}
 		
 		if("CREATE".equals(parsed[CMDINDX])){
@@ -79,14 +95,28 @@ public class CLIProcessor {
 			return store.updateEntry(Integer.parseInt(parsed[ARG1INDX]), Integer.parseInt(parsed[ARG2INDX]), parsed[ARG3INDX]);
 		}
 		
-		return createResult;
+		return validateResult;
 	}
 
 
 
 	private Result processGetLatest(String[] parsed) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		Result validateResult = Validator.validateArgTypes(parsed);
+		if(validateResult != null){
+			return validateResult;
+		}
+		
+		if("LATEST".equals(parsed[CMDINDX])){
+			return store.getLatestData(Integer.parseInt(parsed[ARG1INDX]));
+		}
+		
+		if("GET".equals(parsed[CMDINDX])){
+			return store.getData(Integer.parseInt(parsed[ARG1INDX]), Integer.parseInt(parsed[ARG2INDX]));
+		}
+		
+		return validateResult;
+		
 	}
 
 	
